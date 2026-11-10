@@ -1,0 +1,48 @@
+screen.WATER=Water
+screen.WATER_QUALITY=Water Quality
+screen.LIGHTING=Lighting & Shadows
+screen.POST=Post-Processing
+
+profile.LOW=Low
+profile.MEDIUM=Medium
+profile.HIGH=High
+profile.ULTRA=Ultra
+
+option.WATER_COLOR=Water Colour
+option.WATER_COLOR.comment=Preset for how the water absorbs and scatters light.
+value.WATER_COLOR.0=Clear Blue
+value.WATER_COLOR.1=Tropical
+value.WATER_COLOR.2=Swamp
+value.WATER_COLOR.3=Deep Ocean
+option.WATER_CLARITY=Water Clarity
+option.WATER_CLARITY.comment=Higher values let you see deeper before the water turns opaque.
+option.WATER_WAVE_HEIGHT=Wave Height
+option.WATER_WAVE_SPEED=Wave Speed
+option.WATER_WAVE_SCALE=Wave Scale
+option.WATER_WAVE_SCALE.comment=Higher values make the waves smaller and more frequent.
+option.WATER_WAVE_DETAIL=Wave Detail
+option.WATER_WAVE_DETAIL.comment=Number of wave layers. More layers look better but cost performance.
+option.WATER_REFRACTION=Refraction
+option.WATER_REFLECTIONS=Screen-Space Reflections
+option.WATER_REFLECTIONS.comment=Reflect terrain and objects in the water. The sky is always reflected.
+option.WATER_SSR_STEPS=Reflection Steps
+option.WATER_SSR_STEPS.comment=Ray-march steps for reflections. Higher is more accurate and slower.
+option.WATER_PARALLAX=Wave Parallax
+option.WATER_PARALLAX.comment=Gives the waves apparent depth when viewed at an angle.
+option.WATER_CAUSTICS=Caustics
+option.WATER_CAUSTICS.comment=Moving light patterns on the sea floor.
+option.WATER_CAUSTICS_STRENGTH=Caustics Strength
+option.WATER_FOAM=Shore Foam
+option.RAIN_RIPPLES=Rain Ripples
+
+option.SHADOWS=Shadows
+option.SHADOW_SOFTNESS=Shadow Softness
+option.shadowMapResolution=Shadow Resolution
+option.shadowDistance=Shadow Distance
+option.sunPathRotation=Sun Tilt
+option.SUN_INTENSITY=Sunlight Intensity
+option.TORCH_INTENSITY=Torchlight Intensity
+
+option.EXPOSURE=Exposure
+option.SATURATION=Saturation
+option.VIGNETTE=Vignette
