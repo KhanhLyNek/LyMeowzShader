@@ -1,12 +1,14 @@
-# LyMeowz Shader 🐾  (v0.3)
+# LyMeowz Shader 🐾  (v0.3.1)
 
 Shader pack Minecraft tập trung vào **nước**, chạy trên **Iris** (định dạng OptiFine, backend OpenGL).
 Toàn bộ code được viết mới từ đầu, không sao chép từ shader pack nào khác.
 
-> ⚠️ **Trạng thái: v0.3, chưa được chạy thử trong game.** Cả 34 chương trình GLSL đã được kiểm tra biên dịch bằng
-> `glslangValidator` (kể cả các biến thể bật/tắt từng tùy chọn). Các thông số cân chỉnh (độ sáng, độ dốc sóng,
+> ⚠️ **Trạng thái: v0.3.1, mới được chạy thử một lần.** Lần thử đầu báo lỗi biên dịch `RGBA16F` ở `composite.fsh` (đã sửa ở bản này).
+> Cả 34 chương trình GLSL được kiểm tra biên dịch bằng `glslangValidator` (kể cả các biến thể bật/tắt từng tùy chọn),
+> nhưng công cụ đó không biết các quy tắc riêng của Iris, nên vẫn có thể còn lỗi chỉ lộ ra trong game. Các thông số cân chỉnh (độ sáng, độ dốc sóng,
 > bias bóng đổ, ngưỡng bloom...) là ước lượng ban đầu, cần chỉnh theo mắt khi test.
 >
+> **v0.3.1:** sửa lỗi biên dịch `undefined variable "RGBA16F"`: khai báo format buffer (`colortexNFormat`) giờ nằm trong chú thích để Iris đọc mà GLSL không biên dịch.
 > **v0.3:** bóng đổ nâng cấp (bóng màu qua kính màu, bias và normal offset chỉnh được trong menu), bảng phiên bản 26.1–26.4.
 > **v0.2:** caustics dưới nước, mây procedural (nước phản chiếu mây), bloom, nhiễu tĩnh thay cho nhiễu đổi theo khung hình.
 
