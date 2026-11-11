@@ -1,11 +1,13 @@
-# LyMeowz Shader 🐾
+# LyMeowz Shader 🐾  (v0.2)
 
 Shader pack Minecraft tập trung vào **nước**, chạy trên **Iris** (định dạng OptiFine, backend OpenGL).
 Toàn bộ code được viết mới từ đầu, không sao chép từ shader pack nào khác.
 
-> ⚠️ **Trạng thái: bản đầu tiên (v0.1).** Cả 26 chương trình GLSL đã được kiểm tra biên dịch bằng `glslangValidator`
-> (kể cả các biến thể bật/tắt từng tùy chọn), nhưng **chưa được chạy thử trong game**. Các thông số cân chỉnh
-> (độ sáng, độ dốc sóng, bias bóng đổ...) là ước lượng ban đầu, cần chỉnh theo mắt khi test.
+> ⚠️ **Trạng thái: v0.2, chưa được chạy thử trong game.** Cả 34 chương trình GLSL đã được kiểm tra biên dịch bằng
+> `glslangValidator` (kể cả các biến thể bật/tắt từng tùy chọn). Các thông số cân chỉnh (độ sáng, độ dốc sóng,
+> bias bóng đổ, ngưỡng bloom...) là ước lượng ban đầu, cần chỉnh theo mắt khi test.
+>
+> **v0.2:** caustics dưới nước, mây procedural (nước phản chiếu mây), bloom, nhiễu tĩnh thay cho nhiễu đổi theo khung hình.
 
 ## Hiệu ứng nước
 
@@ -13,15 +15,17 @@ Toàn bộ code được viết mới từ đầu, không sao chép từ shader 
 - **Parallax sóng**: tìm đúng điểm tia nhìn chạm mặt sóng nên sóng có chiều sâu khi nhìn nghiêng.
 - **Khúc xạ**: lệch ảnh đáy nước theo độ nghiêng của pháp tuyến sóng, có kiểm tra để không kéo vào vật thể nằm trước mặt nước.
 - **Hấp thụ & tán xạ theo độ sâu** (Beer-Lambert): đỏ biến mất trước, nước sâu chuyển dần sang xanh. 4 preset màu.
-- **Caustics**: mạng vệt sáng chuyển động dưới đáy, uốn theo sóng thật, trượt theo độ sâu và hướng nắng, bị chặn bởi bóng đổ.
-- **Phản xạ**: Fresnel (Schlick) trộn phản xạ bầu trời với **SSR** (ray-march + tinh chỉnh nhị phân), cổng theo ánh sáng bầu trời để hang động không phản chiếu trời.
+- **Caustics**: mạng vệt sáng chuyển động dưới đáy, uốn theo sóng thật, trượt theo độ sâu và hướng nắng, bị chặn bởi bóng đổ. Hoạt động cả khi nhìn từ trên xuống lẫn khi camera ở dưới nước; sàn nhận nhiều hơn tường nhờ pháp tuyến dựng lại từ depth.
+- **Phản xạ**: Fresnel (Schlick) trộn phản xạ bầu trời (có cả **mây**) với **SSR** (ray-march + tinh chỉnh nhị phân), cổng theo ánh sáng bầu trời để hang động không phản chiếu trời.
 - **Ánh nắng lấp lánh** (GGX) cho mặt trời và mặt trăng.
 - **Bọt sóng ven bờ** ở vùng nước nông.
 - **Gợn nước khi mưa**: vòng tròn lan rộng trên mặt nước ngoài trời.
-- **Dưới nước**: sương mù hấp thụ/tán xạ, cửa sổ Snell và phản xạ toàn phần khi nhìn lên mặt nước.
+- **Dưới nước**: sương mù hấp thụ/tán xạ, cửa sổ Snell (thấy cả mây qua đó) và phản xạ toàn phần khi nhìn lên mặt nước.
+- **Bloom**: ánh nắng lấp lánh trên nước và các điểm sáng HDR tỏa sáng mềm (4 pass, ngưỡng theo độ sáng HDR).
 
-Phần còn lại là nền tối thiểu để nước có thứ để phản chiếu: bầu trời procedural, bóng đổ (PCF xoay), ánh sáng mặt trời/trăng,
-đuốc, sương mù khoảng cách, tonemap filmic.
+Phần còn lại là nền tối thiểu để nước có thứ để phản chiếu: bầu trời procedural kèm **mây procedural**, bóng đổ (PCF xoay),
+ánh sáng mặt trời/trăng, đuốc, sương mù khoảng cách, tonemap filmic. Nhiễu (bóng, SSR) là nhiễu tĩnh vì chưa có TAA,
+nên không bị nhấp nháy theo từng khung hình.
 
 ## Yêu cầu
 
@@ -55,6 +59,8 @@ shaders/
 │   ├── settings.glsl      toàn bộ tùy chọn (hiện trong menu Iris)
 │   ├── waves.glsl         sóng, parallax, gợn mưa, caustics, preset màu nước
 │   ├── sky.glsl           bầu trời, màu nắng/trăng, ambient
+│   ├── clouds.glsl        mây procedural (vẽ trên trời + phản chiếu trên nước)
+│   ├── depth.glsl         dựng vị trí/pháp tuyến từ depth
 │   ├── shadow*.glsl       méo shadow map + lấy mẫu bóng
 │   ├── lighting.glsl      ánh sáng forward dùng chung
 │   └── common.glsl        toán, hash PCG, noise
@@ -62,8 +68,9 @@ shaders/
 ├── gbuffers_*             vẽ hình học đã chiếu sáng (HDR) vào colortex0
 ├── gbuffers_water.*       ghi pháp tuyến sóng vào colortex3/4; kính/băng vẫn blend bình thường
 ├── composite.fsh          ⭐ shading nước: khúc xạ, hấp thụ, caustics, SSR, specular, bọt
-├── composite1.fsh         sương mù + hiệu ứng dưới nước
-└── final.fsh              tonemap, saturation, vignette
+├── composite1.fsh         sương mù + hiệu ứng dưới nước (kèm caustics)
+├── composite2-5.fsh       bloom: bright pass + 2 lần blur hẹp + 2 lần blur rộng
+└── final.fsh              bloom, tonemap, saturation, vignette
 ```
 
 Luồng nước: `gbuffers_water` chỉ ghi pháp tuyến sóng (alpha màu = 0 nên không đè cảnh) → `composite` đọc
@@ -71,8 +78,9 @@ pháp tuyến + depth (`depthtex0` có nước, `depthtex1` không có) để d�
 
 ## Giới hạn đã biết / việc tiếp theo
 
-- Caustics chỉ hiện khi nhìn **xuống** nước từ trên; chưa có caustics khi camera ở dưới nước.
-- Chưa có TAA, bloom, mây volumetric, AO, GI, wetness trên địa hình, hiệu ứng ánh sáng màu.
+- Caustics dưới nước dựa trên giả định "mọi thứ thấp hơn mắt đều ngập nước" (shader không biết độ cao mặt nước), nên vệt sáng sẽ mờ dần ở ngang tầm mắt.
+- Mây là lớp 2D procedural và thay thế hoàn toàn mây vanilla (`clouds=off`); tắt *Procedural Clouds* thì sẽ không còn mây. Sprite mặt trời/mặt trăng của vanilla vẫn được vẽ đè lên mây.
+- Chưa có TAA, mây volumetric, AO, GI, wetness trên địa hình, hiệu ứng ánh sáng màu.
 - Chỉ nhận water là `minecraft:water` (id 10001); nước của mod khác chưa được map.
 - Không hỗ trợ Distant Horizons (`dh_*`) và Vulkan.
 - `gl_Color` của terrain được dùng làm AO + tint; nếu thấy mặt block bị tối bất thường, báo lại để chỉnh.

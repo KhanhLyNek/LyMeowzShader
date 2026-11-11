@@ -1,6 +1,7 @@
 screen.WATER=Nước
 screen.WATER_QUALITY=Chất lượng nước
 screen.LIGHTING=Ánh sáng & Bóng đổ
+screen.SKY=Bầu trời & Mây
 screen.POST=Hậu kỳ
 
 profile.LOW=Thấp
@@ -46,3 +47,10 @@ option.TORCH_INTENSITY=Cường độ đuốc
 option.EXPOSURE=Phơi sáng
 option.SATURATION=Độ bão hòa
 option.VIGNETTE=Tối góc màn hình
+
+option.PROCEDURAL_CLOUDS=Mây procedural
+option.PROCEDURAL_CLOUDS.comment=Mây được vẽ trong shader bầu trời để mặt nước phản chiếu được. Tắt tùy chọn này sẽ bỏ hoàn toàn mây.
+option.CLOUD_COVERAGE=Độ phủ mây
+option.BLOOM=Bloom
+option.BLOOM.comment=Các điểm sáng mạnh như nắng lấp lánh trên nước sẽ tỏa sáng mềm.
+option.BLOOM_STRENGTH=Cường độ bloom

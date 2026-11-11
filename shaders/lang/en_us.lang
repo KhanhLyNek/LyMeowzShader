@@ -1,6 +1,7 @@
 screen.WATER=Water
 screen.WATER_QUALITY=Water Quality
 screen.LIGHTING=Lighting & Shadows
+screen.SKY=Sky & Clouds
 screen.POST=Post-Processing
 
 profile.LOW=Low
@@ -46,3 +47,10 @@ option.TORCH_INTENSITY=Torchlight Intensity
 option.EXPOSURE=Exposure
 option.SATURATION=Saturation
 option.VIGNETTE=Vignette
+
+option.PROCEDURAL_CLOUDS=Procedural Clouds
+option.PROCEDURAL_CLOUDS.comment=Clouds drawn in the sky shader so the water can reflect them. Turning this off removes clouds entirely.
+option.CLOUD_COVERAGE=Cloud Coverage
+option.BLOOM=Bloom
+option.BLOOM.comment=Bright highlights such as sun glitter on water glow softly.
+option.BLOOM_STRENGTH=Bloom Strength

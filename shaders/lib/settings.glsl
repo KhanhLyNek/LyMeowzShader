@@ -26,10 +26,17 @@
 #define TORCH_INTENSITY 1.0 // [0.5 0.75 1.0 1.5 2.0]
 #define MIN_LIGHT 0.012
 
+// ---- Sky --------------------------------------------------------------------
+#define PROCEDURAL_CLOUDS
+#define CLOUD_COVERAGE 0.5 // [0.3 0.4 0.5 0.6 0.7]
+
 // ---- Post -------------------------------------------------------------------
 #define EXPOSURE 1.0 // [0.6 0.8 1.0 1.2 1.5 2.0]
 #define SATURATION 1.0 // [0.6 0.8 1.0 1.1 1.2 1.4]
 #define VIGNETTE
+#define BLOOM
+#define BLOOM_STRENGTH 1.0 // [0.5 1.0 1.5 2.0 3.0]
+#define BLOOM_THRESHOLD 2.2
 
 // ---- Shadow map (read by Iris) ----------------------------------------------
 const int shadowMapResolution = 2048; // [1024 2048 3072 4096]
