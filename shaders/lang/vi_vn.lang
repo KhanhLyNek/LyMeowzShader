@@ -38,6 +38,12 @@ option.RAIN_RIPPLES=Gợn nước khi mưa
 
 option.SHADOWS=Bóng đổ
 option.SHADOW_SOFTNESS=Độ mềm của bóng
+option.COLORED_SHADOWS=Bóng có màu
+option.COLORED_SHADOWS.comment=Ánh sáng đi qua kính màu và các khối trong suốt khác sẽ mang màu của chúng.
+option.SHADOW_BIAS=Độ lệch bóng (bias)
+option.SHADOW_BIAS.comment=Tăng nếu bóng bị sọc hoặc lốm đốm (acne). Giảm nếu bóng tách rời khỏi vật thể.
+option.SHADOW_NORMAL_OFFSET=Độ đẩy bóng theo pháp tuyến
+option.SHADOW_NORMAL_OFFSET.comment=Đẩy điểm lấy mẫu bóng ra xa bề mặt. Tăng để hết acne trên mặt dốc, giảm nếu bóng bị tách rời.
 option.shadowMapResolution=Độ phân giải bóng
 option.shadowDistance=Khoảng cách bóng
 option.sunPathRotation=Độ nghiêng của mặt trời

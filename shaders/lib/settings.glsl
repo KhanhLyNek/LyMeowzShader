@@ -22,6 +22,9 @@
 // ---- Lighting ---------------------------------------------------------------
 #define SHADOWS
 #define SHADOW_SOFTNESS 1.0 // [0.5 1.0 1.5 2.0]
+#define COLORED_SHADOWS
+#define SHADOW_BIAS 0.0005 // [0.0002 0.0005 0.001 0.002 0.004]
+#define SHADOW_NORMAL_OFFSET 1.0 // [0.5 1.0 1.5 2.0 3.0]
 #define SUN_INTENSITY 1.0 // [0.6 0.8 1.0 1.2 1.5]
 #define TORCH_INTENSITY 1.0 // [0.5 0.75 1.0 1.5 2.0]
 #define MIN_LIGHT 0.012

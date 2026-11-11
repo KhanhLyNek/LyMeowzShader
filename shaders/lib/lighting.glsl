@@ -21,10 +21,10 @@ vec3 lightSurface(vec3 albedo, vec3 normalV, vec2 lm, vec3 feetPos, float noise)
     float NdotL = max(dot(normalV, lightDirV), 0.0);
 
     float skyGate = smoothstep(0.25, 0.85, lm.y);   // no sunlight leaking into caves
-    float vis = 1.0;
+    vec3 vis = vec3(1.0);
 #ifdef SHADOWS
     if (NdotL > 0.0 && skyGate > 0.0)
-        vis = shadowVisibility(feetPos, normalW, NdotL, noise);
+        vis = shadowLight(feetPos, normalW, NdotL, noise);
 #endif
     vis *= skyGate;
 

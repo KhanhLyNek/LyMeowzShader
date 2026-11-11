@@ -38,6 +38,12 @@ option.RAIN_RIPPLES=Rain Ripples
 
 option.SHADOWS=Shadows
 option.SHADOW_SOFTNESS=Shadow Softness
+option.COLORED_SHADOWS=Colored Shadows
+option.COLORED_SHADOWS.comment=Light that passes through stained glass and other translucent blocks takes on their colour.
+option.SHADOW_BIAS=Shadow Bias
+option.SHADOW_BIAS.comment=Raise this if shadows show stripes or speckles (acne). Lower it if shadows look detached from their objects.
+option.SHADOW_NORMAL_OFFSET=Shadow Normal Offset
+option.SHADOW_NORMAL_OFFSET.comment=Pushes the shadow lookup away from surfaces. Raise it to remove acne on slopes, lower it if shadows look detached.
 option.shadowMapResolution=Shadow Resolution
 option.shadowDistance=Shadow Distance
 option.sunPathRotation=Sun Tilt
