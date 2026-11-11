@@ -1,11 +1,13 @@
 #version 330 compatibility
 // ============================================================================
-//  Final pass - tonemap, colour grade, vignette
+//  Final pass - bloom, tonemap, colour grade, vignette
 // ============================================================================
 #include "/lib/settings.glsl"
 #include "/lib/common.glsl"
 
 uniform sampler2D colortex0;
+uniform sampler2D colortex5;   // wide bloom
+uniform sampler2D colortex6;   // narrow bloom
 uniform int frameCounter;
 
 in vec2 texcoord;
@@ -21,6 +23,11 @@ vec3 filmic(vec3 x)
 void main()
 {
     vec3 c = texture(colortex0, texcoord).rgb;
+
+#ifdef BLOOM
+    vec3 bloom = texture(colortex6, texcoord).rgb * 0.6 + texture(colortex5, texcoord).rgb;
+    c += bloom * (0.08 * BLOOM_STRENGTH);
+#endif
 
     c *= 0.5 * EXPOSURE;
     c = filmic(c);

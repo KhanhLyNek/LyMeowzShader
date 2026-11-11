@@ -9,8 +9,10 @@
 #include "/lib/common.glsl"
 #include "/lib/shadow_distort.glsl"
 #include "/lib/sky.glsl"
+#include "/lib/clouds.glsl"
 #include "/lib/shadow.glsl"
 #include "/lib/waves.glsl"
+#include "/lib/depth.glsl"
 
 uniform sampler2D colortex0;   // lit scene (HDR)
 uniform sampler2D colortex3;   // water: view-space normal, a = water flag
@@ -21,14 +23,12 @@ uniform sampler2D depthtex1;   // opaque-only depth
 uniform mat4 gbufferModelView;
 uniform mat4 gbufferModelViewInverse;
 uniform mat4 gbufferProjection;
-uniform mat4 gbufferProjectionInverse;
 uniform vec3 cameraPosition;
 uniform vec3 sunPosition;
 uniform vec3 shadowLightPosition;
 uniform float frameTimeCounter;
 uniform float rainStrength;
 uniform int isEyeInWater;
-uniform int frameCounter;
 
 in vec2 texcoord;
 
@@ -39,13 +39,6 @@ const int colortex4Format = RGBA8;
 
 /* RENDERTARGETS: 0 */
 layout(location = 0) out vec4 outColor;
-
-vec3 viewPosAt(vec2 uv, float depth)
-{
-    vec4 ndc = vec4(uv * 2.0 - 1.0, depth * 2.0 - 1.0, 1.0);
-    vec4 v = gbufferProjectionInverse * ndc;
-    return v.xyz / v.w;
-}
 
 // Screen-space reflection. origin/dir in view space. Returns (colour, confidence).
 vec4 traceSSR(vec3 origin, vec3 dir, float jitter)
@@ -124,7 +117,7 @@ void main()
     vec3 lightDirW = normalize(toWorld * shadowLightPosition);
     float day = dayFactor(sunDirW);
     float rain = rainStrength;
-    float noise = ign(gl_FragCoord.xy, frameCounter);
+    float noise = ign(gl_FragCoord.xy, 0);
     float t = frameTimeCounter;
 
     float lightAmt = (0.06 + 1.1 * day) * (0.2 + 0.8 * skylight);
@@ -144,7 +137,7 @@ void main()
         }
         else
         {
-            vec3 skyCol = skyColor(normalize(toWorld * refr), sunDirW, rain) * 0.9;
+            vec3 skyCol = skyWithClouds(normalize(toWorld * refr), sunDirW, rain, t) * 0.9;
             float F = 0.02 + 0.98 * pow(1.0 - cosT, 5.0);
             color = mix(skyCol, under, saturate(F * 3.0));
         }
@@ -180,11 +173,14 @@ void main()
             vec3 bedFeet = (gbufferModelViewInverse * vec4(bedP, 1.0)).xyz;
             float vDepth = max(surfFeet.y - bedFeet.y, 0.0);
 
+            // floors catch caustics, walls much less
+            vec3 bedN = toWorld * normalFromDepth(depthtex1, ruv);
             float gate = day * (1.0 - rain) * smoothstep(0.5, 0.9, skylight)
-                       * smoothstep(0.05, 0.30, lightDirW.y) * exp(-vDepth * 0.18);
+                       * smoothstep(0.05, 0.30, lightDirW.y) * exp(-vDepth * 0.18)
+                       * (0.3 + 0.7 * saturate(bedN.y));
             if (gate > 0.01)
             {
-                gate *= shadowVisibility(bedFeet, vec3(0.0, 1.0, 0.0), max(lightDirW.y, 0.2), noise);
+                gate *= shadowVisibility(bedFeet, bedN, max(dot(bedN, lightDirW), 0.1), noise);
                 // the pattern slides with depth because the light is refracted at an angle
                 vec2 bp = bedFeet.xz + cameraPosition.xz
                         - lightDirW.xz / max(lightDirW.y, 0.25) * vDepth * 0.6;
@@ -207,7 +203,7 @@ void main()
         vec3 R = reflect(-V, N);
         vec3 Rw = toWorld * R;
         float skyGate = mix(0.06, 1.0, smoothstep(0.15, 0.85, skylight));
-        vec3 reflCol = skyColor(normalize(vec3(Rw.x, max(Rw.y, 0.01), Rw.z)), sunDirW, rain) * skyGate;
+        vec3 reflCol = skyWithClouds(normalize(vec3(Rw.x, max(Rw.y, 0.01), Rw.z)), sunDirW, rain, t) * skyGate;
 
 #ifdef WATER_REFLECTIONS
         if (Rw.y > 0.02)
