@@ -2,6 +2,7 @@
 #include "/lib/settings.glsl"
 #include "/lib/common.glsl"
 #include "/lib/sky.glsl"
+#include "/lib/clouds.glsl"
 
 uniform float viewWidth;
 uniform float viewHeight;
@@ -9,6 +10,7 @@ uniform mat4 gbufferProjectionInverse;
 uniform mat4 gbufferModelViewInverse;
 uniform vec3 sunPosition;
 uniform float rainStrength;
+uniform float frameTimeCounter;
 uniform int renderStage;
 
 in vec4 glcolor;
@@ -34,5 +36,5 @@ void main()
     vec4 vp = gbufferProjectionInverse * vec4(ndc, 1.0);
     vec3 dirW = normalize(toWorld * normalize(vp.xyz / vp.w));
 
-    outColor = vec4(skyColor(dirW, sunDirW, rainStrength), 1.0);
+    outColor = vec4(skyWithClouds(dirW, sunDirW, rainStrength, frameTimeCounter), 1.0);
 }

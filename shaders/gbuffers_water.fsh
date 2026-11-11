@@ -11,7 +11,6 @@ uniform sampler2D gtexture;
 uniform mat4 gbufferModelView;
 uniform vec3 cameraPosition;
 uniform float frameTimeCounter;
-uniform int frameCounter;
 
 in vec2 texcoord;
 in vec2 lmcoord;
@@ -28,7 +27,7 @@ layout(location = 2) out vec4 outWaterData;
 
 void main()
 {
-    float noise = ign(gl_FragCoord.xy, frameCounter);
+    float noise = ign(gl_FragCoord.xy, 0);
 
     // ---- Everything translucent that is not water: ordinary lit, blended -------
     if (isWater < 0.5)

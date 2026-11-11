@@ -9,7 +9,6 @@
 
 uniform sampler2D gtexture;
 uniform vec4 entityColor;
-uniform int frameCounter;
 
 in vec2 texcoord;
 in vec2 lmcoord;
@@ -34,7 +33,7 @@ void main()
     lm = vec2(0.0, 1.0);
 #endif
 
-    float noise = ign(gl_FragCoord.xy, frameCounter);
+    float noise = ign(gl_FragCoord.xy, 0);
     vec3 lit = lightSurface(albedo, normalize(normalV), lm, feetPos, noise);
 
     float alpha = col.a;
