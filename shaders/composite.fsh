@@ -32,10 +32,11 @@ uniform int isEyeInWater;
 
 in vec2 texcoord;
 
-// Render-target formats (read by Iris)
-const int colortex0Format = RGBA16F;
-const int colortex3Format = RGBA16F;
-const int colortex4Format = RGBA8;
+// Render-target formats. Iris reads these straight from the source text, so they live inside
+// comments: the format names (RGBA16F ...) are not GLSL identifiers and must not be compiled.
+/*const int colortex0Format = RGBA16F;*/
+/*const int colortex3Format = RGBA16F;*/
+/*const int colortex4Format = RGBA8;*/
 
 /* RENDERTARGETS: 0 */
 layout(location = 0) out vec4 outColor;

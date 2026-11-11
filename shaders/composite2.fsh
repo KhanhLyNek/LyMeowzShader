@@ -13,8 +13,9 @@ uniform float viewHeight;
 
 in vec2 texcoord;
 
-const int colortex5Format = RGBA16F;
-const int colortex6Format = RGBA16F;
+// Render-target formats, read by Iris from the comment text (see composite.fsh)
+/*const int colortex5Format = RGBA16F;*/
+/*const int colortex6Format = RGBA16F;*/
 
 /* RENDERTARGETS: 5 */
 layout(location = 0) out vec4 outColor;
