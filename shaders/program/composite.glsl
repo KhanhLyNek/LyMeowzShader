@@ -16,6 +16,7 @@ varying vec3 horizonColor;
 #include "/lib/common/position.glsl"
 #include "/lib/atmosphere/atmosphericScattering.glsl"
 #include "/lib/water/waterFog.glsl"
+#include "/lib/atmosphere/volumetricFog.glsl"
 
 #ifdef FSH
 
@@ -41,6 +42,14 @@ void main() {
 	vec2 velocity = texcoord - prePos;
 
 	vec4 CT5 = texture(colortex5, texcoord);
+
+	#ifdef VOLUMETRIC_FOG
+		if(isEyeInWater == 0){
+			float fogDist = depth < 1.0 ? worldDis : VFOG_MAX_DISTANCE;
+			color.rgb = applyVolumetricFog(color.rgb, fogDist, worldDir, temporalBayer64(gl_FragCoord.xy), vfogTimeMult, lightWorldDir, sunColor, skyColor);
+		}
+	#endif
+
 	CT5.ba = velocity;
 	
 /* DRAWBUFFERS:05 */
@@ -62,6 +71,10 @@ void main() {
 	sunWorldDir = normalize(viewPosToWorldPos(vec4(sunPosition, 0.0)).xyz);
     moonWorldDir = normalize(viewPosToWorldPos(vec4(moonPosition, 0.0)).xyz);
     lightWorldDir = normalize(viewPosToWorldPos(vec4(shadowLightPosition, 0.0)).xyz);
+
+	#ifdef VOLUMETRIC_FOG
+		vfogTimeMult = vfogTimeOfDay(sunWorldDir);
+	#endif
 
 	sunColor = getSunColor();
 	skyColor = getSkyColor();
