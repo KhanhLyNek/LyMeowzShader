@@ -16,6 +16,8 @@ varying vec3 horizonColor;
 #include "/lib/common/position.glsl"
 #include "/lib/atmosphere/atmosphericScattering.glsl"
 #include "/lib/water/waterFog.glsl"
+#include "/lib/lighting/lightmap.glsl"
+#include "/lib/atmosphere/mist.glsl"
 
 #ifdef FSH
 
@@ -41,6 +43,14 @@ void main() {
 	vec2 velocity = texcoord - prePos;
 
 	vec4 CT5 = texture(colortex5, texcoord);
+
+	#ifdef MORNING_MIST
+		if(isEyeInWater == 0 && depth < 1.0 && mistAmount > 0.001){
+			float skyExposure = smoothstep(0.25, 0.9, AdjustLightmap(CT5.ba).y);
+			color.rgb = applyMist(color.rgb, worldDis, worldDir, mistAmount, skyExposure, lightWorldDir, sunColor, skyColor);
+		}
+	#endif
+
 	CT5.ba = velocity;
 	
 /* DRAWBUFFERS:05 */
@@ -62,6 +72,10 @@ void main() {
 	sunWorldDir = normalize(viewPosToWorldPos(vec4(sunPosition, 0.0)).xyz);
     moonWorldDir = normalize(viewPosToWorldPos(vec4(moonPosition, 0.0)).xyz);
     lightWorldDir = normalize(viewPosToWorldPos(vec4(shadowLightPosition, 0.0)).xyz);
+
+	#ifdef MORNING_MIST
+		mistAmount = mistAmountFromSun(sunWorldDir);
+	#endif
 
 	sunColor = getSunColor();
 	skyColor = getSkyColor();
