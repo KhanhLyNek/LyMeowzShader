@@ -5,6 +5,8 @@ varying vec4 glcolor;
 
 varying mat3 tbnMatrix;
 
+varying vec3 N;
+
 #include "/lib/uniform.glsl"
 #include "/lib/settings.glsl"
 #include "/lib/common/utils.glsl"
@@ -32,7 +34,8 @@ void main() {
 	
 	float parallaxShadow = 1.0;
 
-	vec3 normalTex = normalize(tbnMatrix * (textureGrad(normals, parallaxUV, texGradX, texGradY).rgb * 2.0 - 1.0));
+	// dung phap tuyen hinh hoc: entity thuong khong co normal map, tangent co the khong hop le (NaN) lam skin bi trang xoa
+	vec3 normalTex = normalize(N);
 	vec4 specularTex = texture(specular, texcoord);
 
 	vec2 lightmapCoord = lmcoord;
@@ -75,7 +78,7 @@ void main() {
     gl_Position.xyz *= gl_Position.w;
 
 	// TBN Mat 参考自 BSL shader
-	vec3 N = normalize(gl_NormalMatrix * gl_Normal);
+	N = normalize(gl_NormalMatrix * gl_Normal);
 	vec3 B = normalize(gl_NormalMatrix * cross(at_tangent.xyz, gl_Normal.xyz) * at_tangent.w);
 	vec3 T = normalize(gl_NormalMatrix * at_tangent.xyz);
 	tbnMatrix = mat3(T, B, N);
