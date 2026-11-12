@@ -1,5 +1,5 @@
 // ════════════════════════════════════════════════════════
-// GoldenSpring V1 Shader Pack
+// LyMeowz Shader Pack
 // A cinematic golden-hour shader for Minecraft Java
 // Warm amber sunlight · Cool blue shadows · Soft volumetric fog
 // Requires Iris Shaders 1.16+
@@ -146,7 +146,7 @@ const vec3 MieSigma = vec3(3.996) * 1e-6;
 const vec3 MieAbsorptionSigma = vec3(4.4) * 1e-6;
 const vec3 OzoneAbsorptionSigma = vec3(0.650, 1.881, 0.085) * 1e-6;
 
-#define Information GoldenSpring_V1     //     [GoldenSpring_V1]
+#define Information LyMeowz     //     [LyMeowz]
 
 const float H_R = 8500.0;
 const float H_M = 1200.0;
