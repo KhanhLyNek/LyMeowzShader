@@ -36,7 +36,8 @@ void main() {
 
 	// dung phap tuyen hinh hoc: entity thuong khong co normal map, tangent co the khong hop le (NaN) lam skin bi trang xoa
 	vec3 normalTex = normalize(N);
-	vec4 specularTex = texture(specular, texcoord);
+	// entity khong dung specular map: skin dong (dynamic texture) co the tra ve specular sai -> bi phan xa guong / phat sang
+	vec4 specularTex = vec4(0.0);
 
 	vec2 lightmapCoord = lmcoord;
 	if(lightning){
